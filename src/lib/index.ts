@@ -73,12 +73,24 @@ export const defaultOptions: Options = {
   // block matching pathnames
   pathnames: [
     // block unused file extensions
-    /\.(env|git|ssh|php|rss|yml|yaml|asp|cgi|map|aspx|ashx)$/,
+    /\.(env|git|ssh|php|rss|yml|yaml|asp|cgi|map|aspx|ashx|DS_Store)$/,
 
     // git content
     /\.git\/\w+$/,
 
-    // block wordpress (Windows Live Writer)
+    // various .env file combinations (.env.bak, .env.bak, .env.prod etc...)
+    /^\.env\./,
+
+    // vscode config
+    /^\.vscode\//,
+
+    // some firebase crap
+    /^\/__\/hosting\/verification$/,
+
+    // wordpress config files
+    /\/wp-config\./,
+
+    // Windows Live Writer?
     /\/wlwmanifest\.xml$/,
   ],
 
