@@ -2,12 +2,27 @@ import type { Handle } from '@sveltejs/kit'
 import { isIP } from 'net'
 
 export interface Options {
+  // whether to log actions or potential actions
   log: boolean
+
+  // whether to actually block or just warn (for testing)
   block: boolean
+
+  // whether to block direct IP address access (no hostname)
   ip_access: boolean
+
+  // hostname regular expression patterns to block
   hostnames: RegExp[]
+
+  // pathname regular expression patterns to block
   pathnames: RegExp[]
+
+  // user-agent heading regular expression patterns to block
   user_agents: RegExp[]
+
+  // whether to allow robots.txt, even if user-agent is blocked
+  // (otherwise a blocked user-agent that obeys robots.txt can't be told to stop indexing)
+  allow_robots: boolean
 }
 
 export const createHandler = (options?: Partial<Options>): Handle => {
@@ -43,7 +58,11 @@ export const createHandler = (options?: Partial<Options>): Handle => {
     }
 
     if (block(opts.user_agents.some(re => re.test(user_agent)), 'user-agent', user_agent)) {
-      return new Response(null, { status: 410 })
+      // allow bots to access /robots.txt even if blocked, so they can be told to go away
+      // otherwise it's like trying to noindex something that has been blocked
+      if (pathname !== '/robots.txt' || !opts.allow_robots) {
+        return new Response(null, { status: 410 })
+      }
     }
 
     return resolve(event)
@@ -99,4 +118,6 @@ export const defaultOptions: Options = {
     // from https://community.cloudflare.com/t/top-50-user-agents-to-block/222594
     /(360Spider|acapbot|acoonbot|ahrefs|alexibot|asterias|attackbot|backdorbot|becomebot|binlar|blackwidow|blekkobot|blexbot|blowfish|bullseye|bunnys|butterfly|careerbot|casper|checkpriv|cheesebot|cherrypick|chinaclaw|choppy|clshttp|cmsworld|copernic|copyrightcheck|cosmos|crescent|cy_cho|datacha|demon|diavol|discobot|dittospyder|dotbot|dotnetdotcom|dumbot|emailcollector|emailsiphon|emailwolf|exabot|extract|eyenetie|feedfinder|flaming|flashget|flicky|foobot|g00g1e|getright|gigabot|go-ahead-got|gozilla|grabnet|grafula|harvest|heritrix|httrack|icarus6j|jetbot|jetcar|jikespider|kmccrew|leechftp|libweb|linkextractor|linkscan|linkwalker|loader|masscan|miner|majestic|mechanize|mj12bot|morfeus|moveoverbot|netmechanic|netspider|nicerspro|nikto|ninja|nutch|octopus|pagegrabber|planetwork|postrank|proximic|purebot|pycurl|python|queryn|queryseeker|radian6|radiation|realdownload|rogerbot|scooter|seekerspider|semalt|siclab|sindice|sistrix|sitebot|siteexplorer|sitesnagger|skygrid|smartdownload|snoopy|sosospider|spankbot|spbot|sqlmap|stackrambler|stripper|sucker|surftbot|sux0r|suzukacz|suzuran|takeout|teleport|telesoft|true_robots|turingos|turnit|vampire|vikspider|voideye|webleacher|webreaper|webstripper|webvac|webviewer|webwhacker|winhttp|wwwoffle|woxbot|xaldon|xxxyy|yamanalab|yioopbot|youda|zeus|zmeu|zune|zyborg)/
   ],
+
+  allow_robots: true,
 }

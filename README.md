@@ -30,6 +30,7 @@ You can pass a configuration option object to `createHandler`. Any option you se
 - **hostnames** array of `RegExp`'s to check against the hostname of the request
 - **pathnames** array of `RegExp`'s to check against the pathname of the request
 - **user_agents** array of `RegExp`'s to check against the user-agent of the request
+- **allow_robots** (boolean) whether to allow robots.txt access even if user-egent blocked. This can be useful to allow properly behaved user-agents to be told to stop indexing via robots.txt
 
 Requests that fail the pathname check will be rejected with a 404 response
 Requests that fail all other checks will be rejected with a 410 response
