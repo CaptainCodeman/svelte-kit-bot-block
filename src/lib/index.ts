@@ -91,8 +91,14 @@ export const defaultOptions: Options = {
 
   // block matching pathnames
   pathnames: [
+    // block sensitive file extensions
+    /\.(env|git|ssh|map|yml|yaml|DS_Store)$/,
+
     // block unused file extensions
-    /\.(env|git|ssh|php|rss|yml|yaml|asp|cgi|map|aspx|ashx|DS_Store)$/,
+    /\.(php|asp|cgi|aspx|ashx)$/,
+
+    // block nuisance requests
+    /\.(rss|zip|rar|gz|sql)/,
 
     // git content
     /\.git\/\w+$/,
@@ -108,6 +114,12 @@ export const defaultOptions: Options = {
 
     // wordpress config files
     /\/wp-config\./,
+
+    // wordpress admin files
+    /\/wp-admin/,
+
+    // wordpress content files
+    /\/wp-content/,
 
     // Windows Live Writer?
     /\/wlwmanifest\.xml$/,
