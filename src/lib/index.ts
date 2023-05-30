@@ -95,7 +95,7 @@ export const defaultOptions: Options = {
     /\.(env|git|ssh|map|yml|yaml|DS_Store)$/,
 
     // block unused file extensions
-    /\.(php|asp|cgi|aspx|ashx)$/,
+    /\.(php|asp|cgi|aspx|ashx|bak|py|rb)$/,
 
     // block nuisance requests
     /\.(rss|zip|rar|gz|sql)/,
