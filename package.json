@@ -1,6 +1,6 @@
 {
 	"name": "svelte-kit-bot-block",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"type": "module",
 	"keywords": [
 		"svelte-kit",
@@ -30,8 +30,9 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"package": "tsup",
 		"preview": "vite preview",
+		"package": "tsup && publint",
+		"prepublishOnly": "npm run package",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest"
@@ -39,6 +40,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.26.0",
+		"publint": "^0.2.5",
 		"svelte": "^4.2.2",
 		"svelte-check": "^3.5.2",
 		"tslib": "^2.6.2",
