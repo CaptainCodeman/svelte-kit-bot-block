@@ -31,9 +31,10 @@ You can pass a configuration option object to `createHandler`. Any option you se
 - **pathnames** array of `RegExp`'s to check against the pathname of the request
 - **user_agents** array of `RegExp`'s to check against the user-agent of the request
 - **allow_robots** (boolean) whether to allow robots.txt access even if user-egent blocked. This can be useful to allow properly behaved user-agents to be told to stop indexing via robots.txt
+- **block_status** (number) the http status code to use when a request is blocked
 
 Requests that fail the pathname check will be rejected with a 404 response
-Requests that fail all other checks will be rejected with a 410 response
+Requests that fail all other checks will also be rejected with a 404 response by default, but the status can be overriden to any valid http 4xx code if required.
 
 I suggest running first with `{ log: true, block: false }` to see what traffic _would_ be blocked without actually blocking anything. Once you are happy that legitimate traffic wouldn't be impacted, you can enable the `block` option and at a future date, set `log` to false to remove as much noise from your logs as possible.
 
@@ -45,7 +46,7 @@ The default settings are shown below. You can import these as `defaultOptions` t
 import { createHandler, defaultOptions } from 'svelte-kit-bot-block'
 
 export const handle = createHandler({
-	domains: [...defaultOptions.domains, /^some\.other\.annoying\.domain\.com$/],
+  domains: [...defaultOptions.domains, /^some\.other\.annoying\.domain\.com$/],
 })
 ```
 
@@ -70,13 +71,41 @@ hostnames: [
 
 // block matching pathnames
 pathnames: [
+  // block sensitive file extensions
+  /\.(env|git|ssh|map|yml|yaml|DS_Store)$/,
+
   // block unused file extensions
-  /\.(env|git|ssh|php|rss|yml|yaml|asp|cgi|map|aspx|ashx)$/,
+  /\.(php|asp|cgi|aspx|ashx|bak|py|rb)$/,
+
+  // block nuisance requests
+  /\.(rss|zip|rar|gz|sql)/,
 
   // git content
   /\.git\/\w+$/,
 
-  // block wordpress (Windows Live Writer)
+  // various .env file combinations (.env.bak, .env.bak, .env.prod etc...)
+  /^\.env\./,
+
+  // vscode config
+  /^\.vscode\//,
+
+  // some firebase crap
+  /^\/__\/hosting\/verification$/,
+
+  // wordpress config files
+  /\/wp-config\./,
+
+  // wordpress admin files
+  /\/wp-admin\//,
+
+  // wordpress content files
+  /\/wp-content\//,
+  /\/wp-includes\//,
+
+  // wordpress XML-RPC and API Endpoints
+  /\/wp-json\//,
+
+  // Windows Live Writer?
   /\/wlwmanifest\.xml$/,
 ],
 
@@ -85,4 +114,6 @@ user_agents: [
   // from https://community.cloudflare.com/t/top-50-user-agents-to-block/222594
   /(360Spider|acapbot|acoonbot|ahrefs|alexibot|asterias|attackbot|backdorbot|becomebot|binlar|blackwidow|blekkobot|blexbot|blowfish|bullseye|bunnys|butterfly|careerbot|casper|checkpriv|cheesebot|cherrypick|chinaclaw|choppy|clshttp|cmsworld|copernic|copyrightcheck|cosmos|crescent|cy_cho|datacha|demon|diavol|discobot|dittospyder|dotbot|dotnetdotcom|dumbot|emailcollector|emailsiphon|emailwolf|exabot|extract|eyenetie|feedfinder|flaming|flashget|flicky|foobot|g00g1e|getright|gigabot|go-ahead-got|gozilla|grabnet|grafula|harvest|heritrix|httrack|icarus6j|jetbot|jetcar|jikespider|kmccrew|leechftp|libweb|linkextractor|linkscan|linkwalker|loader|masscan|miner|majestic|mechanize|mj12bot|morfeus|moveoverbot|netmechanic|netspider|nicerspro|nikto|ninja|nutch|octopus|pagegrabber|planetwork|postrank|proximic|purebot|pycurl|python|queryn|queryseeker|radian6|radiation|realdownload|rogerbot|scooter|seekerspider|semalt|siclab|sindice|sistrix|sitebot|siteexplorer|sitesnagger|skygrid|smartdownload|snoopy|sosospider|spankbot|spbot|sqlmap|stackrambler|stripper|sucker|surftbot|sux0r|suzukacz|suzuran|takeout|teleport|telesoft|true_robots|turingos|turnit|vampire|vikspider|voideye|webleacher|webreaper|webstripper|webvac|webviewer|webwhacker|winhttp|wwwoffle|woxbot|xaldon|xxxyy|yamanalab|yioopbot|youda|zeus|zmeu|zune|zyborg)/
 ],
+
+block_status: 404,
 ```

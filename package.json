@@ -1,6 +1,6 @@
 {
 	"name": "svelte-kit-bot-block",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"type": "module",
 	"keywords": [
 		"svelte-kit",
@@ -42,16 +42,20 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/kit": "^2.5.7",
-		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"publint": "^0.2.7",
-		"svelte": "^4.2.15",
-		"svelte-check": "^3.7.0",
-		"tslib": "^2.6.2",
-		"tsup": "^8.0.2",
-		"typescript": "^5.4.5",
-		"vite": "^5.2.10",
-		"vitest": "^1.5.2"
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/kit": "^2.50.2",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@types/node": "^25.2.0",
+		"publint": "^0.3.17",
+		"svelte": "^5.49.2",
+		"svelte-check": "^4.3.6",
+		"tslib": "^2.8.1",
+		"tsup": "^8.5.1",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1",
+		"vitest": "^4.0.18"
+	},
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0"
 	}
 }
