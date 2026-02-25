@@ -6,6 +6,8 @@ Instead of allowing these to be processed by your app, which may involve databas
 
 You don't even want your app rendering a nicely formatted error response - these are _not_ legitimate requests, say goodbye to them using as few resources as possible. A simple HTTP response is all that they deserve.
 
+UPDATE: I've created a more flexible package that is significantly faster, called [web-sentinel](https://www.npmjs.com/package/web-sentinel), which I recommend using instead.
+
 ## Usage
 
 Install using your package manager of choice:
